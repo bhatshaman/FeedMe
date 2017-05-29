@@ -32,21 +32,21 @@
         tools:layout_editor_absoluteX="276dp"
         tools:layout_editor_absoluteY="113dp"
         android:layout_alignTop="@+id/inputText"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView" />
+        android:layout_toRightOf="@+id/photoCaptureButton"
+        android:layout_toEndOf="@+id/photoCaptureButton" />
 
     <ImageButton
         android:id="@+id/photoCaptureButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@color/colorAccent"
+        android:layout_marginBottom="36dp"
+        android:background="@android:color/transparent"
         android:clickable="true"
+        android:fabSize="mini"
         android:gravity="center"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_camera_alt_black_24dp"
+        app:srcCompat="@drawable/camerab"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="21dp" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textView"
