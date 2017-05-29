@@ -2,6 +2,7 @@ package com.example.bhat.feedme;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -58,21 +59,17 @@ import static android.R.attr.bitmap;
 import static android.R.attr.data;
 
 
-public class ResultActivity extends AppCompatActivity {
+public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "ResultActivity";
     private File photoFile = null;
-    @BindView(R.id.button)
-    Button NutritionButton;
-    @BindView(R.id.button2)
-    Button RecipeButton;
-    @BindView(R.id.textView2)
-    TextView IngredientName;
-    @BindView(R.id.imageView)
-    ImageView IngredientImage;
+    @BindView(R.id.button) Button NutritionButton;
+    @BindView(R.id.button2) Button RecipeButton;
+    @BindView(R.id.textView2) TextView IngredientName;
+    @BindView(R.id.imageView) ImageView IngredientImage;
     ProgressDialog progressDialog;
-    private String responses = "";
-
+    public String responses = "";
+    public String manuaIngredient="";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
@@ -81,47 +78,66 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         ButterKnife.bind(this);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_IMAGE_CAPTURE);
-        } else {
-            photoFile = null;
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-        }
+        String s = getIntent().getStringExtra("SessionID");
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Getting Results.....");
-    }
+        manuaIngredient=getIntent().getStringExtra("manualIngredient");
+        switch (s) {
+            case "imageCapture":
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_IMAGE_CAPTURE);
+                } else {
+                    photoFile = null;
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                }
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage("Getting Results.....");
+                break;
+            case "manualInput": {
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            try {
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                photoFile = createImageFile();
-                FileOutputStream out = new FileOutputStream(photoFile);
-                out.write(bytes.toByteArray());
-                out.flush();
-                out.close();
-//                progressDialog.show();
-//                new photoRecognition().execute(photoFile);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Log.e(TAG, e.getMessage());
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e(TAG, e.getMessage());
+                IngredientName.setText(manuaIngredient.toUpperCase());
+                responses=manuaIngredient;
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage("Getting Results.....");
             }
-            IngredientImage.setImageBitmap(image);
-            photoFile.deleteOnExit();
+
 
         }
+        NutritionButton.setOnClickListener(this);
+        RecipeButton.setOnClickListener(this);
     }
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                Bitmap image = (Bitmap) data.getExtras().get("data");
+                try {
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                    photoFile = createImageFile();
+                    FileOutputStream out = new FileOutputStream(photoFile);
+                    out.write(bytes.toByteArray());
+                    out.flush();
+                    out.close();
+                    progressDialog.show();
+                    new photoRecognition().execute(photoFile);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+
+                IngredientImage.setImageBitmap(image);
+                photoFile.deleteOnExit();
+
+            }
+        }
 
     public File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -155,7 +171,6 @@ public class ResultActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(File... files) {
             if (files == null) {
-
                 return null;
             } else {
                 if (getResources().getString(R.string.WATSON_API_KEY).equals("Omitted") || getResources().getString(R.string.WATSON_API_KEY).length() < 10) {
@@ -172,14 +187,15 @@ public class ResultActivity extends AppCompatActivity {
                 try {
                     if (result.getImages().size() <= 0) {
                         return "Sorry didn't quite catch that";
+
                     } else {
                         Log.d(TAG, result.toString());
 //                        for (int i = 0; i < result.getImages().get(0).getClassifiers().get(0).getClasses().size(); i++) {
                         responses = result.getImages().get(0).getClassifiers().get(0).getClasses().get(0).getName();
-                        Log.e("TAGGER",responses);
                     }
                     try {
-                        return "Is this a " + result.getImages().get(0).getClassifiers().get(0).getClasses().get(0).getName() + "?";
+                        responses = result.getImages().get(0).getClassifiers().get(0).getClasses().get(0).getName();
+                        return result.getImages().get(0).getClassifiers().get(0).getClasses().get(0).getName().toString();
                     } catch (NullPointerException ex) {
                         return "Sorry didn't quite catch that";
                     }
@@ -189,8 +205,39 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
+        @Override
+        protected void onPostExecute(String s) {
+            if (s != null) {
+                IngredientName.setText(s.toUpperCase());
+                IngredientImage.setVisibility(View.VISIBLE);
+                Log.d(TAG, s);
+                progressDialog.dismiss();
+            } else {
+                progressDialog.dismiss();
+            }
+        }
+
 
     }
-}
+
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId())
+        {
+            case R.id.button:
+                Uri uri = Uri.parse("https://www.google.com/search?q="+responses+"+nutrition+facts");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                break;
+            case R.id.button2:
+                Uri uri2 = Uri.parse("https://www.google.com/search?q="+responses+"+recipes");
+                Intent intent2 = new Intent(Intent.ACTION_VIEW, uri2);
+                startActivity(intent2);
+                break;
+        }
+    }
+    }
 
 

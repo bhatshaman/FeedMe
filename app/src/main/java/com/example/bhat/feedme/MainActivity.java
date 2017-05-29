@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     ProgressDialog progressDialog;
-
+    public String sessionID="";
 
     public String ingredientData="";
     private File photoFile;
@@ -80,7 +80,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.photoCaptureButton:
                 Intent i = new Intent(getBaseContext(), ResultActivity.class);
+                sessionID="imageCapture";
+                i.putExtra("SessionID",sessionID);
                 startActivity(i);
+                break;
+            case R.id.goButton:
+
+
+                Intent i2=new Intent (getBaseContext(),ResultActivity.class);
+                sessionID="manualInput";
+                String input=inputText.getText().toString();
+                i2.putExtra("SessionID",sessionID);
+                i2.putExtra("manualIngredient",input);
+                startActivity(i2);
                 break;
         }
     }
