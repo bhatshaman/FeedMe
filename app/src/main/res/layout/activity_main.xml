@@ -42,7 +42,6 @@
         android:layout_marginBottom="36dp"
         android:background="@android:color/transparent"
         android:clickable="true"
-        android:fabSize="mini"
         android:gravity="center"
         app:srcCompat="@drawable/camerab"
         android:layout_alignParentBottom="true"
