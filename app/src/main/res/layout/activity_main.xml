@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="---------X---------"
+        android:text="OR"
         android:textSize="20sp"
         android:typeface="sans"
         android:layout_marginTop="56dp"
@@ -65,17 +65,16 @@
         android:clickable="true"
         android:gravity="center"
         app:srcCompat="@drawable/camerab"
+        android:layout_marginTop="19dp"
         android:layout_below="@+id/textView2"
-        android:layout_alignLeft="@+id/galleryC"
-        android:layout_alignStart="@+id/galleryC"
-        android:layout_marginTop="25dp" />
+        android:layout_alignStart="@+id/galleryC" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:text="---------X---------"
+        android:text="OR"
         android:textSize="20sp"
         android:typeface="sans"
         android:layout_above="@+id/galleryC"
