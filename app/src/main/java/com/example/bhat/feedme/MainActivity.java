@@ -51,9 +51,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int listCount;
     @BindView(R.id.inputText)TextView inputText;
     @BindView(R.id.goButton)ImageButton sendButton;
-    @BindView(R.id.textView)TextView textView;
+    @BindView(R.id.textView1)TextView textView;
     @BindView(R.id.photoCaptureButton)ImageButton photoButton;
-    @BindView(R.id.galleryChoose) Button galleryChoose;
+   // @BindView(R.id.galleryChoose) Button galleryChoose;
+    @BindView(R.id.galleryC) ImageButton galleryC;
 
 
     @Override
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //responses=new ArrayList<>();
         photoButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
-        galleryChoose.setOnClickListener(this);
+        galleryC.setOnClickListener(this);
         photoFile=null;
     }
 
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 i2.putExtra("manualIngredient",input);
                 startActivity(i2);
                 break;
-            case R.id.galleryChoose:
+            case R.id.galleryC:
                 Intent i3=new Intent(getBaseContext(),ResultActivity.class);
                 sessionID="galleryChoose";
                 i3.putExtra("SessionID",sessionID);

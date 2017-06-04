@@ -12,15 +12,38 @@
         android:id="@+id/inputText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="26dp"
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="61dp"
-        tools:layout_editor_absoluteY="113dp" />
+        tools:layout_editor_absoluteY="113dp"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignStart="@+id/textView1" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="INPUT INGREDIENT"
+        android:textSize="20sp"
+        android:typeface="sans"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="---------X---------"
+        android:textSize="20sp"
+        android:typeface="sans"
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/goButton"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3" />
 
     <ImageButton
         android:id="@+id/goButton"
@@ -32,39 +55,45 @@
         tools:layout_editor_absoluteX="276dp"
         tools:layout_editor_absoluteY="113dp"
         android:layout_alignTop="@+id/inputText"
-        android:layout_toRightOf="@+id/photoCaptureButton"
-        android:layout_toEndOf="@+id/photoCaptureButton" />
+        android:layout_toRightOf="@+id/inputText" />
 
     <ImageButton
         android:id="@+id/photoCaptureButton"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="36dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:gravity="center"
         app:srcCompat="@drawable/camerab"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/galleryC"
+        android:layout_alignStart="@+id/galleryC"
+        android:layout_marginTop="25dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="---------X---------"
+        android:textSize="20sp"
+        android:typeface="sans"
+        android:layout_above="@+id/galleryC"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp" />
+
+    <ImageButton
+        android:id="@+id/galleryC"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        app:srcCompat="@drawable/galleryb"
+        android:layout_marginBottom="23dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_vertical"
-        android:text="INPUT INGREDIENT"
-        android:textSize="20sp"
-        android:typeface="sans" />
-
-    <Button
-        android:id="@+id/galleryChoose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose an Ingredient from Gallery"
-        android:layout_above="@+id/photoCaptureButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="109dp" />
 
 </RelativeLayout>
