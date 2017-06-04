@@ -1,5 +1,6 @@
 package com.example.bhat.feedme;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -40,6 +41,8 @@ import android.widget.Toast;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyImagesOptions;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualClassification;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -62,6 +65,7 @@ import static android.R.attr.data;
 public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "ResultActivity";
+    public String imageFileName,imagePath;
     private File photoFile = null;
     @BindView(R.id.button) Button NutritionButton;
     @BindView(R.id.button2) Button RecipeButton;
@@ -81,6 +85,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         String s = getIntent().getStringExtra("SessionID");
 
         manuaIngredient=getIntent().getStringExtra("manualIngredient");
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+
         switch (s) {
             case "imageCapture":
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -97,6 +103,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case "manualInput": {
 
+                ImageLoader.getInstance().init(config);
+                IngredientImage.setVisibility(View.INVISIBLE);
                 IngredientName.setText(manuaIngredient.toUpperCase());
                 responses=manuaIngredient;
                 progressDialog = new ProgressDialog(this);
@@ -141,10 +149,13 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
     public File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
+        Log.d("timestamp",timeStamp);
+        Log.d("imageFileName",imageFileName);
+//        Log.d("storageDir",storageDir);
+//        Log.d("image",image);
         // Save a file: path for use with ACTION_VIEW intents
         return image;
     }
@@ -238,6 +249,44 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // TODO: this part may need some coding
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("responses", responses);
+        editor.putString("imagePath","/sdcard/"+imageFileName+".jpeg");
+        editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // TODO: this part may need some coding
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        responses=pref.getString("responses",responses);
+        imagePath=pref.getString("imagePath",imagePath);
+//           IngredientImage.setImageBitmap(image);
+        File imgFile = new  File("/sdcard/Images/"+imageFileName+".jpg");
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            IngredientImage.setImageBitmap(myBitmap);
+
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // TODO: this part may need some coding
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+//        editor.putInt("maintainPos", maintainPos);
+        editor.apply();
+    }
+
+
     }
 
 
