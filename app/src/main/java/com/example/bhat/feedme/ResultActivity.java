@@ -1,6 +1,7 @@
 package com.example.bhat.feedme;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -75,6 +76,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     public String responses = "";
     public String manuaIngredient="";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_GALLERY_IMAGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 progressDialog.setMessage("Getting Results.....");
                 break;
             case "manualInput": {
-
                 ImageLoader.getInstance().init(config);
                 IngredientImage.setVisibility(View.INVISIBLE);
                 IngredientName.setText(manuaIngredient.toUpperCase());
@@ -111,8 +112,23 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
                 progressDialog.setMessage("Getting Results.....");
+                break;
             }
-
+            case "galleryChoose":
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    //Need to set permissions
+                    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_IMAGE_CAPTURE);
+                }
+                else{
+                    photoFile = null;
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(galleryIntent, REQUEST_GALLERY_IMAGE);
+                }
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.setMessage("Getting Results.....");
+                break;
 
         }
         NutritionButton.setOnClickListener(this);
@@ -145,6 +161,33 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 photoFile.deleteOnExit();
 
             }
+
+            if(requestCode == REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK){
+                Uri galleryUri = data.getData();
+                Bitmap image = getGalleryImagePath(galleryUri);
+                try {
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+                    photoFile = createImageFile();
+                    FileOutputStream out = new FileOutputStream(photoFile);
+                    out.write(bytes.toByteArray());
+                    out.flush();
+                    out.close();
+                    progressDialog.show();
+                    new photoRecognition().execute(photoFile);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+                IngredientImage.setImageBitmap(image);
+                photoFile.deleteOnExit();
+
+
+
+            }
         }
 
     public File createImageFile() throws IOException {
@@ -174,7 +217,34 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(this, "Please Grant Permission", Toast.LENGTH_SHORT).show();
                 }
             }
+            case REQUEST_GALLERY_IMAGE: {
+                //permission granted
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                }
+            }
         }
+    }
+
+
+    public Bitmap getGalleryImagePath(Uri uri) {
+        if(uri == null){
+            return null;
+        }
+        String[] data = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri,data,null,null,null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex(data[0]);
+        String path = cursor.getString(index);
+        cursor.close();
+        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new String[]{ MediaStore.MediaColumns._ID}
+                ,MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
+        cursor.moveToFirst();
+        int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+        cursor.close();
+        return MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(),id,MediaStore.Images.Thumbnails.MICRO_KIND, null);
+
+
     }
 
     private class photoRecognition extends AsyncTask<File, Integer, String> {
