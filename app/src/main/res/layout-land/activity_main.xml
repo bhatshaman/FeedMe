@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.bhat.feedme.MainActivity"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
+
+    <EditText
+        android:id="@+id/inputText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="61dp"
+        tools:layout_editor_absoluteY="113dp" />
+
+    <ImageButton
+        android:id="@+id/goButton"
+        android:layout_width="65dp"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_send_black_24dp"
+        tools:layout_editor_absoluteX="276dp"
+        tools:layout_editor_absoluteY="113dp"
+        android:layout_alignTop="@+id/inputText"
+        android:layout_toRightOf="@+id/photoCaptureButton"
+        android:layout_toEndOf="@+id/photoCaptureButton" />
+
+    <ImageButton
+        android:id="@+id/photoCaptureButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="36dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:gravity="center"
+        app:srcCompat="@drawable/camerab"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="INPUT INGREDIENT"
+        android:textSize="20sp"
+        android:typeface="sans" />
+
+</RelativeLayout>
