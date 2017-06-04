@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.goButton)ImageButton sendButton;
     @BindView(R.id.textView)TextView textView;
     @BindView(R.id.photoCaptureButton)ImageButton photoButton;
+    @BindView(R.id.galleryChoose) Button galleryChoose;
 
 
     @Override
@@ -66,13 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         photoButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
         photoFile=null;
-
-
-
     }
-
-
-
 
     @Override
     public void onClick(View view) {
@@ -85,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(i);
                 break;
             case R.id.goButton:
-
-
                 Intent i2=new Intent (getBaseContext(),ResultActivity.class);
                 sessionID="manualInput";
                 String input=inputText.getText().toString();
@@ -94,8 +87,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 i2.putExtra("manualIngredient",input);
                 startActivity(i2);
                 break;
+            case R.id.galleryChoose:
+                Intent i3=new Intent(getBaseContext(),ResultActivity.class);
+                sessionID="galleryChoose";
+                i3.putExtra("SessionID",sessionID);
+                startActivity(i3);
+                break;
         }
     }
+
+
 
 
 
