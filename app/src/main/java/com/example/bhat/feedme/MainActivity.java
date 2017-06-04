@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //responses=new ArrayList<>();
         photoButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
+        galleryChoose.setOnClickListener(this);
         photoFile=null;
     }
 
