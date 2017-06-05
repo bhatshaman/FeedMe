@@ -105,7 +105,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case "manualInput": {
                 ImageLoader.getInstance().init(config);
-                IngredientImage.setVisibility(View.INVISIBLE);
+               // IngredientImage.setVisibility(View.INVISIBLE);
                 IngredientName.setText(manuaIngredient.toUpperCase());
                 responses=manuaIngredient;
                 progressDialog = new ProgressDialog(this);

@@ -17,10 +17,9 @@
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="61dp"
         tools:layout_editor_absoluteY="113dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/textView1"
-        android:layout_alignStart="@+id/textView1"
-        android:layout_marginStart="11dp" />
+        android:layout_alignStart="@+id/textView1" />
 
     <TextView
         android:id="@+id/textView1"
@@ -35,20 +34,6 @@
         android:textSize="20sp"
         android:typeface="monospace" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_below="@+id/goButton"
-        android:layout_marginTop="56dp"
-        android:fontFamily="monospace"
-        android:gravity="center_vertical"
-        android:text="OR"
-        android:textSize="20sp"
-        android:typeface="monospace" />
-
     <ImageButton
         android:id="@+id/goButton"
         android:layout_width="65dp"
@@ -59,7 +44,7 @@
         tools:layout_editor_absoluteX="276dp"
         tools:layout_editor_absoluteY="113dp"
         android:layout_alignTop="@+id/inputText"
-        android:layout_toEndOf="@+id/photoCaptureButton" />
+        android:layout_toEndOf="@+id/inputText" />
 
     <ImageButton
         android:id="@+id/photoCaptureButton"
@@ -69,22 +54,22 @@
         android:clickable="true"
         android:gravity="center"
         app:srcCompat="@drawable/camerab"
-        android:layout_marginTop="19dp"
-        android:layout_below="@+id/textView2"
-        android:layout_alignStart="@+id/galleryC" />
+        android:layout_alignTop="@+id/galleryC"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="34dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/galleryC"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp"
         android:fontFamily="monospace"
         android:gravity="center_vertical"
         android:text="OR"
         android:textSize="20sp"
-        android:typeface="monospace" />
+        android:typeface="monospace"
+        android:layout_alignTop="@+id/photoCaptureButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp" />
 
     <ImageButton
         android:id="@+id/galleryC"
@@ -95,9 +80,10 @@
         android:clickable="true"
         android:gravity="center"
         app:srcCompat="@drawable/galleryb"
-        android:layout_marginBottom="23dp"
+        android:layout_marginStart="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp" />
 
 
 </RelativeLayout>
