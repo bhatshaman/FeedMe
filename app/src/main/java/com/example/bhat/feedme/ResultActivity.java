@@ -83,7 +83,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         ButterKnife.bind(this);
-
         String s = getIntent().getStringExtra("SessionID");
 
         manuaIngredient=getIntent().getStringExtra("manualIngredient");
@@ -105,7 +104,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case "manualInput": {
                 ImageLoader.getInstance().init(config);
-               // IngredientImage.setVisibility(View.INVISIBLE);
                 IngredientName.setText(manuaIngredient.toUpperCase());
                 responses=manuaIngredient;
                 progressDialog = new ProgressDialog(this);
@@ -167,7 +165,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 Bitmap image = getGalleryImagePath(galleryUri);
                 try {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                     photoFile = createImageFile();
                     FileOutputStream out = new FileOutputStream(photoFile);
                     out.write(bytes.toByteArray());
@@ -235,16 +233,26 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         Cursor cursor = getContentResolver().query(uri,data,null,null,null);
         cursor.moveToFirst();
         int index = cursor.getColumnIndex(data[0]);
-        String path = cursor.getString(index);
-        cursor.close();
-        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new String[]{ MediaStore.MediaColumns._ID}
-                ,MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
-        cursor.moveToFirst();
-        int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-        cursor.close();
-        return MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(),id,MediaStore.Images.Thumbnails.MICRO_KIND, null);
+//        String path = cursor.getString(index);
+        String imagePath = cursor.getString(cursor.getColumnIndex(data[0]));
+//        cursor.close();
+//        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new String[]{ MediaStore.MediaColumns._ID}
+//                ,MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
+//        cursor.moveToFirst();
+//        int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+//        cursor.close();
+//        return MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(),id,MediaStore.Images.Thumbnails.MICRO_KIND, null);
+
+        // Let's read picked image path using content resolver
+//        String[] filePath = { MediaStore.Images.Media.DATA };
+//        Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
+//        cursor.moveToFirst();
 
 
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+        return bitmap;
     }
 
     private class photoRecognition extends AsyncTask<File, Integer, String> {
@@ -297,11 +305,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 progressDialog.dismiss();
             }
         }
-
-
     }
-
-
 
     @Override
     public void onClick(View view) {

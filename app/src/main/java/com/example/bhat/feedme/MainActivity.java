@@ -53,9 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.goButton)ImageButton sendButton;
     @BindView(R.id.textView1)TextView textView;
     @BindView(R.id.photoCaptureButton)ImageButton photoButton;
-   // @BindView(R.id.galleryChoose) Button galleryChoose;
     @BindView(R.id.galleryC) ImageButton galleryC;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
 
         listCount=0;
-        //responses=new ArrayList<>();
         photoButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
         galleryC.setOnClickListener(this);
