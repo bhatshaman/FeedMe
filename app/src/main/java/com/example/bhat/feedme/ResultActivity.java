@@ -115,7 +115,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             case "galleryChoose":
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     //Need to set permissions
-                    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_IMAGE_CAPTURE);
+                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_GALLERY_IMAGE);
                 }
                 else{
                     photoFile = null;
@@ -182,9 +182,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 IngredientImage.setImageBitmap(image);
                 photoFile.deleteOnExit();
-
-
-
             }
         }
 
@@ -195,8 +192,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         Log.d("timestamp",timeStamp);
         Log.d("imageFileName",imageFileName);
-//        Log.d("storageDir",storageDir);
-//        Log.d("image",image);
         // Save a file: path for use with ACTION_VIEW intents
         return image;
     }
@@ -233,22 +228,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         Cursor cursor = getContentResolver().query(uri,data,null,null,null);
         cursor.moveToFirst();
         int index = cursor.getColumnIndex(data[0]);
-//        String path = cursor.getString(index);
         String imagePath = cursor.getString(cursor.getColumnIndex(data[0]));
-//        cursor.close();
-//        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,new String[]{ MediaStore.MediaColumns._ID}
-//                ,MediaStore.MediaColumns.DATA + "=?", new String[] {path}, null);
-//        cursor.moveToFirst();
-//        int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-//        cursor.close();
-//        return MediaStore.Images.Thumbnails.getThumbnail(getContentResolver(),id,MediaStore.Images.Thumbnails.MICRO_KIND, null);
-
-        // Let's read picked image path using content resolver
-//        String[] filePath = { MediaStore.Images.Media.DATA };
-//        Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
-//        cursor.moveToFirst();
-
-
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
@@ -324,43 +304,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // TODO: this part may need some coding
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("responses", responses);
-        editor.putString("imagePath","/sdcard/"+imageFileName+".jpeg");
-        editor.apply();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // TODO: this part may need some coding
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        responses=pref.getString("responses",responses);
-        imagePath=pref.getString("imagePath",imagePath);
-//           IngredientImage.setImageBitmap(image);
-        File imgFile = new  File("/sdcard/Images/"+imageFileName+".jpg");
-        if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            IngredientImage.setImageBitmap(myBitmap);
-
-        }
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // TODO: this part may need some coding
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = pref.edit();
-//        editor.putInt("maintainPos", maintainPos);
-        editor.apply();
-    }
-
-
-    }
+}
 
 
