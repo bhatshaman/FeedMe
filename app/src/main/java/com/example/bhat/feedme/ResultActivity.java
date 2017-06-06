@@ -105,7 +105,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             case "manualInput": {
                 ImageLoader.getInstance().init(config);
                 IngredientName.setText(manuaIngredient.toUpperCase());
-                responses=manuaIngredient;
+                responses=manuaIngredient.toString();
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);

@@ -44,6 +44,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="53dp" />
 
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -51,7 +52,6 @@
         android:layout_below="@+id/goButton"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="false"
-        android:layout_centerVertical="false"
         android:layout_marginTop="14dp"
         android:fontFamily="monospace"
         android:gravity="center_horizontal"
